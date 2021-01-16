@@ -2,7 +2,11 @@ package starvation;
 
 import deadlock.TestObject;
 
-public class Starvation {
+/**
+ * Для фикса голодания нужно после выполнения необходимых операций вызвать wait() на залоченном объекте, чтобы у других
+ * потоков была возможность перехватить залоченный объект
+ */
+public class StarvationFix {
 
     public static void main(String[] args) {
         TestObject object = new TestObject("TestObject");
@@ -21,6 +25,7 @@ public class Starvation {
                     synchronized (object) {
                         Thread.sleep(1000);
                         System.out.println(Thread.currentThread().getName() + " работает");
+                        object.wait(100);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -31,14 +36,12 @@ public class Starvation {
 
 //    Результат выполнения:
 //
+//    Thread-1 работает
 //    Thread-0 работает
+//    Thread-1 работает
 //    Thread-0 работает
+//    Thread-1 работает
 //    Thread-0 работает
-//    Thread-0 работает
-//    Thread-0 работает
-//    Thread-0 работает
-//    Thread-0 работает
-//    Thread-0 работает
-//    Thread-0 работает
+//    Thread-1 работает
 
 }
